@@ -1,5 +1,5 @@
-import { generateToken } from "../services/jwt-service.js";
-import User from "../models/user-model.js";
+import { generateToken } from "../services/jwt_services.js";
+import User from "../models/user_model.js";
 
 export const login = async (req, res) => {
   try {

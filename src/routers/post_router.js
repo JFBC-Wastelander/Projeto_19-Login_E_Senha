@@ -6,7 +6,7 @@ import {
   show,
   store,
   update,
-} from "../controllers/post-controller.js";
+} from "../controllers/post_controller.js";
 const router = Router();
 
 // Rotas públicas
