@@ -1,15 +1,13 @@
-import express from "express";
-import "dotenv/config";
-import "./config/db.js"
-import user_router from "./routers/user_router.js"
-import post_router from "./routers/post_router.js"
+import e from "express";
+import "dotenv/config.js";
+import "./config/db.js";
+import user_router from "./routes/user-route.js";
+import post_router from "./routes/post-route.js"
 
-const app = express();
-app.use(express.json());
+const app = e();
 
+app.use(e.json());
 app.use("/user", user_router);
 app.use("/post", post_router);
 
-app.listen(process.env.API_PORT, () => {
-  console.log("Aplicação rodando");
-});
+app.listen(process.env.API_PORT, () => console.log("Server running"));

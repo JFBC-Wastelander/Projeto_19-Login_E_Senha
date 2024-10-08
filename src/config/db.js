@@ -1,14 +1,10 @@
 import mongoose from "mongoose";
 
-const main = async () => {
+(async () => {
   try {
     await mongoose.connect(process.env.MONGODB);
-    console.log("Conectado com o banco");
-  } catch (err) {
-    console.log(err);
+    console.log("Connected with DB");
+  } catch (error) {
+    console.log(error);
   }
-};
-
-main();
-
-export default mongoose;
+})();

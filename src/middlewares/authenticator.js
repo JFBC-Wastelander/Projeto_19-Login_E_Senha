@@ -1,17 +1,20 @@
-import jwt_services from "../services/jwt_services.js"
+import { verifyToken } from "../services/jwt-service.js";
+import User from "../models/user-model.js";
 
-const authenticator = (req, res, next) => {
-    try {
-        let token = req.headers.authorization.split(" ")(1)
-        let user = jwt_services.verifyToken(token)
-    
-        if (user) {
-            req.user = user
-            next()
-        }
-        
-        throw new Error()
-    } catch (error) {
-        res.sendStatus(401)
+export default async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const user = verifyToken(token);
+
+    if (user) {
+      req.user = await User.findById(user._id).exec();
+      console.log(req.user)
+      next();
+    } else {
+      throw new Error();
     }
-}
+
+  } catch (error) {
+    res.sendStatus(401);
+  }
+};

@@ -1,39 +1,85 @@
-import Post from "../models/post_model.js"
+import Post from "../models/post-model.js";
 
-const store = async (req, res) => {
-    try {
-        let { text } = req.body
-        let user = req.user._id
+export const store = async (req, res) => {
+  try {
+    const { text } = req.body;
+    const user = req.user._id;
 
-        let content = await Post.create({
-            text,
-            user
-        })
+    const content = await Post.create({
+      text,
+      user,
+    });
 
-        res.status(201).json(content)
-    } catch (error) {
-        res.status(500).json(error.message)
+    res.status(201).json(content);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+export const index = async (req, res) => {
+  try {
+    const filter = {
+      user: {
+        $in: req.user.following,
+      },
+    };
+
+    const content = await Post.find(filter).exec();
+
+    res.json(content);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+export const show = async (req, res) => {
+  try {
+    const content = await Post.findById(req.params.id).exec();
+
+    res.json(content);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const user = req.user._id;
+    const { text } = req.body;
+
+    const content = await Post.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        user,
+      },
+      { text }
+    ).exec();
+
+    if (content) {
+      res.json(content);
+    } else {
+      res.sendStatus(403);
     }
-}
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
 
-const index = async (req, res) => {
-    try {
-        let { text } = req.body
+export const destroy = async (req, res) => {
+  try {
+    const user = req.user._id;
 
-        let content = await Post.find().exec()
+    const content = await Post.findOneAndDelete({
+      _id: req.params.id,
+      user,
+    }).exec();
 
-        res.json(content)
-    } catch (error) {
-        res.status(500).json(error.message)
+    if (content) {
+      res.json(content);
+    } else {
+      res.sendStatus(403);
     }
-}
-
-const update = async (req, res) => {
-    try {
-        let content = await Post
-
-        res.json(content)
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};

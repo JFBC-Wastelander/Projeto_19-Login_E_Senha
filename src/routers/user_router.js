@@ -1,9 +1,32 @@
-import express from "express"
-import user_controller from "../controllers/user_controller.js"
+import { Router } from "express";
+import {
+  login,
+  signup,
+  destroy,
+  index,
+  show,
+  store,
+  update,
+  followUnfollow,
+} from "../controllers/user-controller.js";
+import authorizer from "../middlewares/authorizer.js";
+import authenticator from "../middlewares/authenticator.js";
 
-const router = express.Router()
+const router = Router();
 
-router.post("/login", user_controller.login)
-router.post("/singup", user_controller.signup)
+router.post("/login", login);
+router.post("/signup", signup);
 
-export default router
+router.use(authenticator);
+
+router.put("/follow-unfollow/:id", followUnfollow)
+
+router.use(authorizer(["ADMINISTRATOR", "SUPPORT"]));
+
+router.get("/", index);
+router.get("/:id", show);
+router.post("/", store);
+router.put("/:id", update);
+router.delete("/:id", destroy);
+
+export default router;

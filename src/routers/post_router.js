@@ -1,14 +1,23 @@
-import express from "express"
-import authenticator from "../middlewares/authenticator.js"
+import { Router } from "express";
+import authenticator from "../middlewares/authenticator.js";
+import {
+  destroy,
+  index,
+  show,
+  store,
+  update,
+} from "../controllers/post-controller.js";
+const router = Router();
 
-const router = express.router()
+// Rotas públicas
 
-//rotas públicas (sem autenticador)
-router.get("/", index)
-router.post("/:id", show)
+router.use(authenticator);
 
-//rotas particulares (com autenticador)
-router.use(authenticator)
-router.post("/", store)
-router.put("/:id", update)
-router.delete("/:id", destroy)
+// Rotas privadas
+router.get("/", index);
+router.get("/:id", show);
+router.post("/", store);
+router.put("/:id", update);
+router.delete("/:id", destroy);
+
+export default router;
