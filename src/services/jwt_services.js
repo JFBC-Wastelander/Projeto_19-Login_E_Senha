@@ -7,11 +7,11 @@ export const generateToken = (user) =>
       email: user.email,
       role: user.role
     },
-    process.env.JWT_PRIVATE_KEY,
+    process.env.JWT_SECRET_KEY,
     {
       expiresIn: "1h",
     }
   );
 
 export const verifyToken = (token) =>
-  jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+  jwt.verify(token, process.env.JWT_SECRET_KEY);
